@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dreyer.core.notify.dao.NotifyRecordLogMapper">
+    <resultMap id="BaseResultMap" type="com.dreyer.facade.notify.entity.NotifyRecordLog">
+        <id column="id_" property="id" jdbcType="BIGINT"/>
+        <result column="version_" property="version" jdbcType="SMALLINT"/>
+        <result column="create_time_" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="notify_id_" property="notifyId" jdbcType="BIGINT"/>
+        <result column="request_" property="request" jdbcType="VARCHAR"/>
+        <result column="response_" property="response" jdbcType="VARCHAR"/>
+        <result column="merchant_no_" property="merchantNo" jdbcType="VARCHAR"/>
+        <result column="merchant_order_no_" property="merchantOrderNo" jdbcType="VARCHAR"/>
+        <result column="http_status_" property="httpStatus" jdbcType="SMALLINT"/>
+    </resultMap>
+    <sql id="Condition_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Condition_Where_Clause">
+        <where>
+            <foreach collection="condition.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+    id_, version_, create_time_, notify_id_, request_, response_, merchant_no_, merchant_order_no_,
+    http_status_
+  </sql>
+    <select id="selectByCondition" resultMap="BaseResultMap"
+            parameterType="com.dreyer.facade.notify.criteria.NotifyRecordLogCriteria">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from trade_notify_record_log
+        <if test="_parameter != null">
+            <include refid="Condition_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+        <if test="limitStart>0 or limitStart==0">
+            limit ${limitStart} , ${limitEnd}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from trade_notify_record_log
+        where id_ = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from trade_notify_record_log
+    where id_ = #{id,jdbcType=BIGINT}
+  </delete>
+    <delete id="deleteByCondition" parameterType="com.dreyer.facade.notify.criteria.NotifyRecordLogCriteria">
+        delete from trade_notify_record_log
+        <if test="_parameter != null">
+            <include refid="Condition_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.dreyer.facade.notify.entity.NotifyRecordLog">
+    insert into trade_notify_record_log (id_, version_, create_time_,
+    notify_id_, request_, response_,
+    merchant_no_, merchant_order_no_, http_status_
+    )
+    values (#{id,jdbcType=BIGINT}, #{version,jdbcType=SMALLINT}, #{createTime,jdbcType=TIMESTAMP},
+    #{notifyId,jdbcType=BIGINT}, #{request,jdbcType=VARCHAR}, #{response,jdbcType=VARCHAR},
+    #{merchantNo,jdbcType=VARCHAR}, #{merchantOrderNo,jdbcType=VARCHAR}, #{httpStatus,jdbcType=SMALLINT}
+    )
+  </insert>
+    <insert id="insertSelective" parameterType="com.dreyer.facade.notify.entity.NotifyRecordLog">
+        insert into trade_notify_record_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id_,
+            </if>
+            <if test="version != null">
+                version_,
+            </if>
+            <if test="createTime != null">
+                create_time_,
+            </if>
+            <if test="notifyId != null">
+                notify_id_,
+            </if>
+            <if test="request != null">
+                request_,
+            </if>
+            <if test="response != null">
+                response_,
+            </if>
+            <if test="merchantNo != null">
+                merchant_no_,
+            </if>
+            <if test="merchantOrderNo != null">
+                merchant_order_no_,
+            </if>
+            <if test="httpStatus != null">
+                http_status_,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="version != null">
+                #{version,jdbcType=SMALLINT},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="notifyId != null">
+                #{notifyId,jdbcType=BIGINT},
+            </if>
+            <if test="request != null">
+                #{request,jdbcType=VARCHAR},
+            </if>
+            <if test="response != null">
+                #{response,jdbcType=VARCHAR},
+            </if>
+            <if test="merchantNo != null">
+                #{merchantNo,jdbcType=VARCHAR},
+            </if>
+            <if test="merchantOrderNo != null">
+                #{merchantOrderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="httpStatus != null">
+                #{httpStatus,jdbcType=SMALLINT},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByCondition" parameterType="com.dreyer.facade.notify.criteria.NotifyRecordLogCriteria"
+            resultType="java.lang.Integer">
+        select count(*) from trade_notify_record_log
+        <if test="_parameter != null">
+            <include refid="Condition_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByConditionSelective" parameterType="map">
+        update trade_notify_record_log
+        <set>
+            <if test="record.id != null">
+                id_ = #{record.id,jdbcType=BIGINT},
+            </if>
+            <if test="record.version != null">
+                version_ = #{record.version,jdbcType=SMALLINT},
+            </if>
+            <if test="record.createTime != null">
+                create_time_ = #{record.createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.notifyId != null">
+                notify_id_ = #{record.notifyId,jdbcType=BIGINT},
+            </if>
+            <if test="record.request != null">
+                request_ = #{record.request,jdbcType=VARCHAR},
+            </if>
+            <if test="record.response != null">
+                response_ = #{record.response,jdbcType=VARCHAR},
+            </if>
+            <if test="record.merchantNo != null">
+                merchant_no_ = #{record.merchantNo,jdbcType=VARCHAR},
+            </if>
+            <if test="record.merchantOrderNo != null">
+                merchant_order_no_ = #{record.merchantOrderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="record.httpStatus != null">
+                http_status_ = #{record.httpStatus,jdbcType=SMALLINT},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Condition_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByCondition" parameterType="map">
+        update trade_notify_record_log
+        set id_ = #{record.id,jdbcType=BIGINT},
+        version_ = #{record.version,jdbcType=SMALLINT},
+        create_time_ = #{record.createTime,jdbcType=TIMESTAMP},
+        notify_id_ = #{record.notifyId,jdbcType=BIGINT},
+        request_ = #{record.request,jdbcType=VARCHAR},
+        response_ = #{record.response,jdbcType=VARCHAR},
+        merchant_no_ = #{record.merchantNo,jdbcType=VARCHAR},
+        merchant_order_no_ = #{record.merchantOrderNo,jdbcType=VARCHAR},
+        http_status_ = #{record.httpStatus,jdbcType=SMALLINT}
+        <if test="_parameter != null">
+            <include refid="Update_By_Condition_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.dreyer.facade.notify.entity.NotifyRecordLog">
+        update trade_notify_record_log
+        <set>
+            <if test="version != null">
+                version_ = #{version,jdbcType=SMALLINT},
+            </if>
+            <if test="createTime != null">
+                create_time_ = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="notifyId != null">
+                notify_id_ = #{notifyId,jdbcType=BIGINT},
+            </if>
+            <if test="request != null">
+                request_ = #{request,jdbcType=VARCHAR},
+            </if>
+            <if test="response != null">
+                response_ = #{response,jdbcType=VARCHAR},
+            </if>
+            <if test="merchantNo != null">
+                merchant_no_ = #{merchantNo,jdbcType=VARCHAR},
+            </if>
+            <if test="merchantOrderNo != null">
+                merchant_order_no_ = #{merchantOrderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="httpStatus != null">
+                http_status_ = #{httpStatus,jdbcType=SMALLINT},
+            </if>
+        </set>
+        where id_ = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.dreyer.facade.notify.entity.NotifyRecordLog">
+    update trade_notify_record_log
+    set version_ = #{version,jdbcType=SMALLINT},
+    create_time_ = #{createTime,jdbcType=TIMESTAMP},
+    notify_id_ = #{notifyId,jdbcType=BIGINT},
+    request_ = #{request,jdbcType=VARCHAR},
+    response_ = #{response,jdbcType=VARCHAR},
+    merchant_no_ = #{merchantNo,jdbcType=VARCHAR},
+    merchant_order_no_ = #{merchantOrderNo,jdbcType=VARCHAR},
+    http_status_ = #{httpStatus,jdbcType=SMALLINT}
+    where id_ = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
